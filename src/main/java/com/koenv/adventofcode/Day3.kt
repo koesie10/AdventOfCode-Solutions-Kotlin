@@ -51,7 +51,7 @@ object Day3 {
     }
 
     data class Coordinate(val x: Int, val y: Int) {
-        public fun plus(other: Coordinate): Coordinate {
+        public operator fun plus(other: Coordinate): Coordinate {
             return Coordinate(x + other.x, y + other.y)
         }
     }
