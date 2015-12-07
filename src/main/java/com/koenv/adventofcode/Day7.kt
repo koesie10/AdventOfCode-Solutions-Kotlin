@@ -13,7 +13,7 @@ class Day7 {
         val into = inputParts[1]
         if (command.isDigits()) {
             wires.put(into, command.toInt())
-            unsatisfiedDependencies.removeIf { it.into == into }
+            unsatisfiedDependencies.removeAll { it.into == into }
             satisfyDependencies(into)
         } else if (command.isLetters()) {
             val satisfiable = wires.containsKey(command)
@@ -21,7 +21,7 @@ class Day7 {
                 unsatisfiedDependencies.add(Dependency(arrayListOf(command), input, into))
             } else {
                 wires.put(into, this[command])
-                unsatisfiedDependencies.removeIf { it.into == into }
+                unsatisfiedDependencies.removeAll { it.into == into }
                 satisfyDependencies(into)
             }
         } else {
@@ -33,7 +33,7 @@ class Day7 {
                     unsatisfiedDependencies.add(Dependency(arrayListOf(first), input, into))
                 } else {
                     wires.put(into, getValue(first).toInt().inv().toUnsignedShort())
-                    unsatisfiedDependencies.removeIf { it.into == into }
+                    unsatisfiedDependencies.removeAll { it.into == into }
                     satisfyDependencies(into)
                 }
             } else if (commandParts.size == 3) {
@@ -56,7 +56,7 @@ class Day7 {
                     val secondValue = if (second.isDigits()) second.toInt() else this[second]
                     val resultValue = executeOperation(operator, firstValue, secondValue)
                     wires.put(into, resultValue.toUnsignedShort())
-                    unsatisfiedDependencies.removeIf { it.into == into }
+                    unsatisfiedDependencies.removeAll { it.into == into }
                     satisfyDependencies(into)
                 }
             } else {
