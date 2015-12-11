@@ -9,15 +9,17 @@ object Day10 {
         input.forEach {
             if (it != lastCharacter) {
                 if (lastCharacter != null) {
-                    result.append("$characterCount$lastCharacter")
+                    result.append(characterCount)
+                    result.append(lastCharacter!!)
                 }
                 lastCharacter = it
                 characterCount = 0
             }
             characterCount++
         }
-
-        result.append("$characterCount$lastCharacter")
+        
+        result.append(characterCount)
+        result.append(lastCharacter!!)
 
         return result.toString()
     }
