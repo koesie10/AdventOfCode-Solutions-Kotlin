@@ -32,9 +32,9 @@ class Day18(val width: Int, val height: Int) {
     }
 
     public fun setState(input: String) {
-        input.lines().forEachIndexed { column, row ->
-            row.forEachIndexed { i, state ->
-                grid[column][i] = if (state == '#') STATE_ON else STATE_OFF
+        input.lines().forEachIndexed { y, row ->
+            row.forEachIndexed { x, state ->
+                grid[x][y] = if (state == '#') STATE_ON else STATE_OFF
             }
         }
     }
@@ -180,7 +180,7 @@ class Day18(val width: Int, val height: Int) {
                 }
             })
 
-            loop.start()
+//            loop.start()
         }
 
         fun initGrid() {
@@ -210,8 +210,8 @@ class Day18(val width: Int, val height: Int) {
             context.fillRect(0.0, 0.0, context.canvas.width, context.canvas.height)
             context.fill = Color.WHITE
 
-            control.grid.forEachIndexed { y, row ->
-                row.forEachIndexed { x, cell ->
+            control.grid.forEachIndexed { x, row ->
+                row.forEachIndexed { y, cell ->
                     if (cell == STATE_ON) {
                         context.fillRect(x * gridSizeX, y * gridSizeY, gridSizeX, gridSizeY)
                     }
