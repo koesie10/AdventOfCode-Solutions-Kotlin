@@ -14,7 +14,7 @@ fun <T : Any> Collection<T>.permutations(): Sequence<List<T>> = if (size == 1) s
         } else null
     }
 
-    sequence { nextPermutation() }
+    generateSequence { nextPermutation() }
 }
 
 operator fun MatchResult?.get(index: Int): String {

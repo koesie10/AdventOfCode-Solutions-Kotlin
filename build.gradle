@@ -1,25 +1,26 @@
-apply plugin: 'java'
-apply plugin: 'kotlin'
-
-repositories {
-	jcenter()
-	mavenCentral()
-}
-
-dependencies {
-	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-	compile 'org.json:json:20151123'
-
-	testCompile 'junit:junit:4.12'
-	testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
-}
-
 buildscript {
-	ext.kotlin_version = '1.0.0-beta-4583'
+	ext.kotlin_version = '1.0.5-2'
 	repositories {
 		mavenCentral()
 	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+	}
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'kotlin'
+
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+
+	dependencies {
+		compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+		testCompile 'junit:junit:4.12'
+		testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
 	}
 }

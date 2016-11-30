@@ -19,19 +19,19 @@ import java.util.*
 class Day18(val width: Int, val height: Int) {
     private val grid: Array<Array<Int>>
 
-    public val numberOfLightsInOnState: Int
+    val numberOfLightsInOnState: Int
         get() = grid.sumBy {
             it.sum()
         }
 
-    public val numberOfLightsInOffState: Int
+    val numberOfLightsInOffState: Int
         get() = width * height - numberOfLightsInOnState
 
     init {
         this.grid = Array(width, { Array(height, { STATE_OFF }) }) // Initialize an array of int[width][height] with all states set to 0
     }
 
-    public fun setState(input: String) {
+    fun setState(input: String) {
         input.lines().forEachIndexed { y, row ->
             row.forEachIndexed { x, state ->
                 grid[x][y] = if (state == '#') STATE_ON else STATE_OFF
@@ -39,14 +39,14 @@ class Day18(val width: Int, val height: Int) {
         }
     }
 
-    public fun turnCornersOn() {
+    fun turnCornersOn() {
         grid[0][0] = STATE_ON
         grid[width - 1][0] = STATE_ON
         grid[0][height - 1] = STATE_ON
         grid[width - 1][height - 1] = STATE_ON
     }
 
-    public fun tick() {
+    fun tick() {
         val oldGrid = grid.map { it.map { it } }
 
         for (x in 0..grid.size - 1) {
@@ -61,7 +61,7 @@ class Day18(val width: Int, val height: Int) {
         }
     }
 
-    public fun toggle(x: Int, y: Int) {
+    fun toggle(x: Int, y: Int) {
         grid[x][y] = if (grid[x][y] == STATE_ON) STATE_OFF else STATE_ON
     }
 
@@ -104,14 +104,17 @@ class Day18(val width: Int, val height: Int) {
     class ViewerApplication : Application() {
         private val control = Day18(100, 100)
 
+        private var currentTime: Long = 0L
         private var currentTick: Long = 0L
+        private var speed: Long = 1L
+        private var running = false
 
         override fun start(primaryStage: Stage) {
             primaryStage.title = "Advent of Code - Day 18"
             primaryStage.isResizable = false
 
             val root = StackPane()
-            val canvas = Canvas(800.0, 800.0)
+            val canvas = Canvas(800.0, 900.0)
             val context = canvas.graphicsContext2D
 
             canvas.isFocusTraversable = true
@@ -130,8 +133,10 @@ class Day18(val width: Int, val height: Int) {
 
             val loop = object : AnimationTimer() {
                 override fun handle(now: Long) {
-                    control.tick()
-                    currentTick++
+                    if (running && ++currentTime % speed == 0L) {
+                        control.tick()
+                        currentTick++
+                    }
                     drawGrid(context, now)
                 }
             }
@@ -168,23 +173,29 @@ class Day18(val width: Int, val height: Int) {
                         currentTick = 0
                     }
                     "p" -> {
-                        loop.stop()
-                    }
-                    "s" -> {
-                        loop.start()
+                        running = !running
                     }
                     "q" -> {
                         loop.stop()
                         primaryStage.close()
                     }
+                    "=", "+", "." -> {
+                        speed--
+                        if (speed <= 0) {
+                            speed = 1
+                        }
+                    }
+                    "-", "," -> {
+                        speed++
+                    }
                 }
             })
 
-//            loop.start()
+            loop.start()
         }
 
         fun initGrid() {
-            control.setState(FileReader("src/test/resources/day18.txt").buffered().readText())
+            control.setState(FileReader("2015/src/test/resources/day18.txt").buffered().readText())
         }
 
         private var prev: Long = 0L
@@ -213,13 +224,20 @@ class Day18(val width: Int, val height: Int) {
             control.grid.forEachIndexed { x, row ->
                 row.forEachIndexed { y, cell ->
                     if (cell == STATE_ON) {
-                        context.fillRect(x * gridSizeX, y * gridSizeY, gridSizeX, gridSizeY)
+                        context.fillRect(x * gridSizeX, y * gridSizeY + 100.0, gridSizeX, gridSizeY)
                     }
                 }
             }
 
-            context.fill = Color.RED
-            context.fillText("FPS: $fps, Tick: $currentTick", 0.0, 0.0)
+            val text = "FPS: $fps, Tick: $currentTick, Speed: ${1.0f / speed}"
+
+            context.fill = Color.WHITE
+            context.fillText(text, 0.0, 0.0)
+
+            if (!running) {
+                context.fill = Color.RED
+                context.fillText("PAUSED", 0.0, 30.0)
+            }
         }
     }
 }
