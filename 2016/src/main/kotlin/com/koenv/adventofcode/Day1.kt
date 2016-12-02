@@ -22,6 +22,55 @@ object Day1 {
         return Math.abs(x) + Math.abs(y)
     }
 
+    fun getFirstLocationVisitedTwice(input: String): Int {
+        var heading: Int = 0 // heading North, positive is clockwise
+        // store our coordinates
+        var x: Int = 0
+        var y: Int = 0
+
+        val visitedLocations = mutableListOf<Pair<Int, Int>>()
+
+        input.split(",").map(String::trim).forEach {
+            heading = getNewHeading(heading, it[0])
+
+            val blocks = it.substring(1).toInt()
+
+            var (xDiff, yDiff) = getXYDiff(heading, blocks)
+
+            while (Math.abs(xDiff) > 0) {
+                val sign = Integer.signum(xDiff)
+                xDiff -= sign
+                x += sign
+
+                val location = x to y
+
+                if (location in visitedLocations) {
+                    // the total distance is away is just the total x + total y distance
+                    return Math.abs(x) + Math.abs(y)
+                }
+
+                visitedLocations.add(x to y)
+            }
+
+            while (Math.abs(yDiff) > 0) {
+                val sign = Integer.signum(yDiff)
+                yDiff -= sign
+                y += sign
+
+                val location = x to y
+
+                if (location in visitedLocations) {
+                    // the total distance is away is just the total x + total y distance
+                    return Math.abs(x) + Math.abs(y)
+                }
+
+                visitedLocations.add(x to y)
+            }
+        }
+
+        throw IllegalStateException("There were no locations that were visited twice")
+    }
+
     fun getNewHeading(oldHeading: Int, direction: Char): Int {
         var newHeading = oldHeading
 
