@@ -1,6 +1,6 @@
 package com.koenv.adventofcode
 
-object Day2 {
+object Day2Part1 {
     fun getBathroomCode(input: String): Int {
         // store the 'coordinates' on the keypad
         var x = 0
