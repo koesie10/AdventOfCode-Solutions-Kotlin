@@ -13,4 +13,14 @@ class Day5Test {
     fun part1Real() {
         assertEquals("c6697b55", Day5.getPassword("ffykfhsq"))
     }
+
+    @Test
+    fun part2Example() {
+        assertEquals("05ace8e3", Day5.getPasswordInOrder("abc"))
+    }
+
+    @Test
+    fun part2Real() {
+        assertEquals("8c35d1ab", Day5.getPasswordInOrder("ffykfhsq"))
+    }
 }
