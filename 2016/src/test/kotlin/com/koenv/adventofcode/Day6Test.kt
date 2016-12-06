@@ -30,4 +30,31 @@ enarar
     fun part1Real() {
         assertEquals("xdkzukcf", Day6.getPassword(getInput(6)))
     }
+
+    @Test
+    fun part2Example() {
+        assertEquals("advent", Day6.getPasswordPart2("""
+eedadn
+drvtee
+eandsr
+raavrd
+atevrs
+tsrnev
+sdttsa
+rasrtv
+nssdts
+ntnada
+svetve
+tesnvt
+vntsnd
+vrdear
+dvrsen
+enarar
+        """))
+    }
+
+    @Test
+    fun part2Real() {
+        assertEquals("cevsgyvd", Day6.getPasswordPart2(getInput(6)))
+    }
 }

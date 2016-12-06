@@ -34,4 +34,15 @@ object Day6 {
                     .first
         }.toCharArray())
     }
+
+    fun getPasswordPart2(input: String): String {
+        val counts = countCharactersPerColumn(input)
+
+        return String(counts.map {
+            it.toList()
+                    .sortedBy { it.second }
+                    .first()
+                    .first
+        }.toCharArray())
+    }
 }
