@@ -13,7 +13,7 @@ object Day7 {
             when (it) {
                 '[' -> {
                     if (currentType == Type.HYPERNET) {
-                        throw IllegalStateException("Nested hypernet")
+                        throw IllegalArgumentException("Nested hypernet")
                     }
                     result.add(Part(currentType, currentPart.toString()))
 
@@ -22,7 +22,7 @@ object Day7 {
                 }
                 ']' -> {
                     if (currentType != Type.HYPERNET) {
-                        throw IllegalStateException("Invalid end of hypernet")
+                        throw IllegalArgumentException("Invalid end of hypernet")
                     }
                     result.add(Part(currentType, currentPart.toString()))
 
@@ -34,7 +34,7 @@ object Day7 {
         }
 
         if (currentType == Type.HYPERNET) {
-            throw IllegalStateException("Unfinished hypernet")
+            throw IllegalArgumentException("Unfinished hypernet")
         }
 
         result.add(Part(currentType, currentPart.toString()))
@@ -62,7 +62,7 @@ object Day7 {
         val chars = input.toCharArray()
 
         for (i in 0..chars.size - 4) {
-            if (chars[i] == chars[i+3] && chars[i + 1] == chars[i + 2]) {
+            if (chars[i] == chars[i + 3] && chars[i + 1] == chars[i + 2]) {
                 return chars[i] != chars[i + 1] // it cannot be a continuous string
             }
         }
@@ -70,10 +70,53 @@ object Day7 {
         return false
     }
 
-    fun countIpsThatSupportTls(input: String) = input.lines()
+    fun countIpsThatSupport(input: String, predicate: (String) -> Boolean) = input.lines()
             .filter(String::isNotBlank)
-            .map { supportsTls(it.trim()) }
+            .map { predicate(it.trim()) }
             .count { it }
+
+    fun countIpsThatSupportTls(input: String) = countIpsThatSupport(input, { supportsTls(it) })
+
+    fun getAbas(input: String): List<String> {
+        val chars = input.toCharArray()
+
+        val result = mutableListOf<String>()
+
+        for (i in 0..chars.size - 3) {
+            if (chars[i] == chars[i + 2] && chars[i] != chars[i + 1]) {
+                result.add(String(charArrayOf(chars[i], chars[i + 1], chars[i + 2])))
+            }
+        }
+
+        return result
+    }
+
+    fun getMatchingBab(input: String): String {
+        if (input.length != 3) {
+            throw IllegalArgumentException("Invalid ABA")
+        }
+
+        return String(charArrayOf(input[1], input[0], input[1]))
+    }
+
+    fun supportsSsl(input: String) = supportsSsl(parseParts(input))
+
+    fun supportsSsl(parts: List<Part>): Boolean {
+        val abas = parts
+                .filter { it.type == Type.IP }
+                .map { getAbas(it.value) }
+                .flatten()
+
+        val babs = parts
+                .filter { it.type == Type.HYPERNET }
+                .map { getAbas(it.value) }
+                .flatten()
+                .map { getMatchingBab(it) }
+
+        return abas.intersect(babs).any()
+    }
+
+    fun countIpsThatSupportSsl(input: String) = countIpsThatSupport(input, { supportsSsl(it) })
 
     data class Part(
             val type: Type,

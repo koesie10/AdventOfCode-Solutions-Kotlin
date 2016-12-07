@@ -15,14 +15,14 @@ class Day7Test {
     }
 
     @Test
-    fun parsePartsExample5() {
+    fun parsePartsExample4() {
         assertEquals(
                 listOf(Day7.Part(Day7.Type.IP, "ioxxoj"), Day7.Part(Day7.Type.HYPERNET, "asdfgh"), Day7.Part(Day7.Type.IP, "zxcvbn")),
                 Day7.parseParts("ioxxoj[asdfgh]zxcvbn")
         )
     }
 
-    @Test(expected = IllegalStateException::class)
+    @Test(expected = IllegalArgumentException::class)
     fun parsePartsInvalidExample() {
         Day7.parseParts("abcd[asdf")
     }
@@ -80,5 +80,55 @@ ioxxoj[asdfgh]zxcvbn
     @Test
     fun part1Real() {
         assertEquals(110, Day7.countIpsThatSupportTls(getInput(7)))
+    }
+
+    @Test
+    fun getAbasExample1() {
+        assertEquals(listOf("aba"), Day7.getAbas("aba"))
+    }
+
+    @Test
+    fun getAbasExample4() {
+        assertEquals(listOf("zaz", "zbz"), Day7.getAbas("zazbz"))
+    }
+
+    @Test
+    fun getMatchingAbaExample1() {
+        assertEquals("bab", Day7.getMatchingBab("aba"))
+    }
+
+    @Test
+    fun supportsSslExample1() {
+        assertTrue(Day7.supportsSsl("aba[bab]xyz"))
+    }
+
+    @Test
+    fun supportsSslExample2() {
+        assertFalse(Day7.supportsSsl("xyx[xyx]xyx"))
+    }
+
+    @Test
+    fun supportsSslExample3() {
+        assertTrue(Day7.supportsSsl("aaa[kek]eke"))
+    }
+
+    @Test
+    fun supportsSslExample4() {
+        assertTrue(Day7.supportsSsl("zazbz[bzb]cdb"))
+    }
+
+    @Test
+    fun part2Example() {
+        assertEquals(3, Day7.countIpsThatSupportSsl("""
+aba[bab]xyz
+xyx[xyx]xyx
+aaa[kek]eke
+zazbz[bzb]cdb
+        """))
+    }
+
+    @Test
+    fun part2Real() {
+        assertEquals(242, Day7.countIpsThatSupportSsl(getInput(7)))
     }
 }
