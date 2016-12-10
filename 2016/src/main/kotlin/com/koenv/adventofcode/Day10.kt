@@ -13,7 +13,13 @@ object Day10 {
         return finalBot
     }
 
-    fun execute(input: String, until: (Int, Int, Int) -> Unit): Inventories {
+    fun part2(input: String): Int {
+        val inventories = execute(input, { bot, low, high -> })
+
+        return inventories.outputs[0]!! * inventories.outputs[1]!! * inventories.outputs[2]!!
+    }
+
+    fun execute(input: String, until: (bot: Int, low: Int, high: Int) -> Unit): Inventories {
         val inventories = Inventories()
 
         val instructions = input.lines()

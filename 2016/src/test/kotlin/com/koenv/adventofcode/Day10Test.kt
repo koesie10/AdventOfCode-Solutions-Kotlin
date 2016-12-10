@@ -20,4 +20,9 @@ value 2 goes to bot 2
     fun part1Real() {
         assertEquals(118, Day10.execute(getInput(10), 61, 17))
     }
+
+    @Test
+    fun part2Real() {
+        assertEquals(143153, Day10.part2(getInput(10)))
+    }
 }
