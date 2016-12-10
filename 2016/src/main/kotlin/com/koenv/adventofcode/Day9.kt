@@ -3,7 +3,7 @@ package com.koenv.adventofcode
 import java.util.regex.Pattern
 
 object Day9 {
-    fun decompress(input: String): String {
+    fun decompressPart1(input: String): String {
         var pos = 0
         val result = StringBuilder()
         val matcher = numberRegex.matcher(input)
@@ -37,10 +37,54 @@ object Day9 {
         return result.toString()
     }
 
-    fun countDecompressed(input: String): Int {
-        val decompressed = decompress(input)
+    fun decompressPart2(input: String): Long {
+        var pos = 0
+        var result = 0L
 
-        return decompressed.replace("\\s", "").trim().length
+        while (pos < input.length) {
+            val char = input[pos]
+            if (char == '(') {
+                pos++ // parentheses
+
+                val (length, lengthPos) = getInt(input, pos)
+                pos = lengthPos
+
+                val (count, countPos) = getInt(input, pos)
+                pos = countPos
+
+                val repeated = input.substring(pos, pos + length)
+                pos += length
+
+                result += count * decompressPart2(repeated)
+            } else if (char == ' ' || char == '\n' || char == '\r') {
+                pos++
+            } else {
+                result++
+                pos++
+            }
+        }
+
+        return result
+    }
+
+    fun getInt(input: String, pos: Int): Pair<Int, Int> {
+        var char = input[pos]
+
+        var newPos = pos + 1
+
+        val result = StringBuilder()
+
+        while (char.isDigit()) {
+            result.append(char)
+
+            char = input[newPos++]
+        }
+
+        return result.toString().toInt() to newPos
+    }
+
+    fun countCharacters(input: String): Int {
+        return input.replace("\\s", "").trim().length
     }
 
     val numberRegex: Pattern = Pattern.compile("(\\d+)x(\\d+)\\)")
