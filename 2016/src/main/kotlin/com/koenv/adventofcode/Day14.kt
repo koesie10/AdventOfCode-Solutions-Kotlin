@@ -35,7 +35,6 @@ object Day14 {
                             if (digest[j] == hash[l] && hash[l] == hash[l - 1] && hash[l] == hash[l - 2]
                                     && hash[l] == hash[l - 3] && hash[l] == hash[l - 4]) {
                                 keys.add(digest)
-                                println(i)
                                 break@check
                             }
                         }
